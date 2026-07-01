@@ -56311,6 +56311,7 @@ module.exports = /*#__PURE__*/JSON.parse('{"application/1d-interleaved-parityfec
 var __webpack_exports__ = {};
 const core = __nccwpck_require__(7484);
 const fs = __nccwpck_require__(9896);
+const path = __nccwpck_require__(6928);
 const axios = __nccwpck_require__(7269)
 
 async function validateSubscription() {
@@ -56355,7 +56356,18 @@ async function run() {
     console.log('Welcome to Get-XML-Version.')
 
     var argv = __nccwpck_require__(994)(process.argv.slice(2));
-    var xmlFile = (typeof argv.f !== 'undefined') ? argv.f : process.env.GITHUB_WORKSPACE+'/'+core.getInput('xml-file', { required: true });
+    var xmlFile;
+    if (typeof argv.f !== 'undefined') {
+      xmlFile = argv.f;
+    } else {
+      const workspace = path.resolve(process.env.GITHUB_WORKSPACE);
+      const resolved = path.resolve(workspace, core.getInput('xml-file', { required: true }));
+      if (!resolved.startsWith(workspace + path.sep) && resolved !== workspace) {
+        core.setFailed('xml-file must be within GITHUB_WORKSPACE');
+        return;
+      }
+      xmlFile = resolved;
+    }
     var xpathToSearch = (typeof argv.p !== 'undefined') ? argv.p : core.getInput('xpath', { required: true });
     var debug = (typeof argv.d !== 'undefined') ? true : false;
     var zeroNodesAction = (typeof argv.z !== 'undefined') ? argv.z : (core.getInput('zero-nodes-action', {required: false}) || 'error')

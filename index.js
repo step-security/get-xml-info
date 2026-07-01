@@ -1,5 +1,6 @@
 const core = require('@actions/core');
 const fs = require('fs');
+const path = require('path');
 const axios = require('axios')
 
 async function validateSubscription() {
@@ -44,7 +45,18 @@ async function run() {
     console.log('Welcome to Get-XML-Version.')
 
     var argv = require('minimist')(process.argv.slice(2));
-    var xmlFile = (typeof argv.f !== 'undefined') ? argv.f : process.env.GITHUB_WORKSPACE+'/'+core.getInput('xml-file', { required: true });
+    var xmlFile;
+    if (typeof argv.f !== 'undefined') {
+      xmlFile = argv.f;
+    } else {
+      const workspace = path.resolve(process.env.GITHUB_WORKSPACE);
+      const resolved = path.resolve(workspace, core.getInput('xml-file', { required: true }));
+      if (!resolved.startsWith(workspace + path.sep) && resolved !== workspace) {
+        core.setFailed('xml-file must be within GITHUB_WORKSPACE');
+        return;
+      }
+      xmlFile = resolved;
+    }
     var xpathToSearch = (typeof argv.p !== 'undefined') ? argv.p : core.getInput('xpath', { required: true });
     var debug = (typeof argv.d !== 'undefined') ? true : false;
     var zeroNodesAction = (typeof argv.z !== 'undefined') ? argv.z : (core.getInput('zero-nodes-action', {required: false}) || 'error')
