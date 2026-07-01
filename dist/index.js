@@ -56358,8 +56358,13 @@ async function run() {
     var argv = __nccwpck_require__(994)(process.argv.slice(2));
     var xmlFile;
     if (typeof argv.f !== 'undefined') {
+      // CLI mode (-f flag) is intentionally unrestricted — developer/local use only, no GitHub Actions environment assumed.
       xmlFile = argv.f;
     } else {
+      if (!process.env.GITHUB_WORKSPACE) {
+        core.setFailed('GITHUB_WORKSPACE environment variable is not set');
+        return;
+      }
       const workspace = path.resolve(process.env.GITHUB_WORKSPACE);
       const resolved = path.resolve(workspace, core.getInput('xml-file', { required: true }));
       if (!resolved.startsWith(workspace + path.sep) && resolved !== workspace) {
@@ -56399,7 +56404,7 @@ async function run() {
 
         selector = xpath.select
         if (namespaces)
-          selector=selector=xpath.useNamespaces(JSON.parse(namespaces));
+          selector = xpath.useNamespaces(JSON.parse(namespaces));
 
         var nodes = selector(xpathToSearch, doc);
         if (debug) {
