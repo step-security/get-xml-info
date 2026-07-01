@@ -1,0 +1,31 @@
+{
+  "name": "get-xml-info",
+  "version": "2.1.0",
+  "description": "Get Information from XML files to use into your GitHub workflows",
+  "main": "index.js",
+  "scripts": {
+    "build": "ncc build index.js --license licenses.txt -o dist/",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "step-security",
+  "license": "GPL-3.0-or-later",
+  "dependencies": {
+    "@actions/core": "^2.0.2",
+    "@xmldom/xmldom": "^0.9.10",
+    "axios": "^1.18.1",
+    "minimist": "^1.2.8",
+    "xpath": "^0.0.34"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/step-security/get-xml-info.git"
+  },
+  "bugs": {
+    "url": "https://github.com/step-security/get-xml-info/issues"
+  },
+  "homepage": "https://github.com/step-security/get-xml-info#readme",
+  "devDependencies": {
+    "@vercel/ncc": "^0.44.0"
+  }
+}

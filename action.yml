@@ -1,0 +1,26 @@
+name: 'Get XML Info'
+author: 'step-security'
+description: 'Get Information from XML files to use into your GitHub workflows'
+branding:
+  icon: 'info'  
+  color: 'green'
+inputs:
+  xml-file:
+    description: 'The xml file from which to retrieve information.'
+    required: true
+    default: 'test.xml'
+  xpath:
+    description: 'The XPath of a node, to fetch its contents as output.'
+    required: true
+    default: '//element'
+  zero-nodes-action:
+    description: 'Allow zero nodes to not fail'
+    required: false
+    default: 'error'
+  namespaces:
+    description: 'namespaces to use'
+    required: false
+    default: ''
+runs:
+  using: 'node24'
+  main: 'dist/index.js'
