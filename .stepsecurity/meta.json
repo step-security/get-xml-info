@@ -1,0 +1,18 @@
+{
+   "schema_version": "1",
+   "onboarding_type": "copied",
+   "archived": false,
+   "maintained_action_name": "step-security/get-xml-info",
+   "upstream_full_repo_name": "mavrosxristoforos/get-xml-info",
+   "action_type": "node",
+   "last_release": {
+     "tag_name": "v2.1.0",
+     "created_at": "2026-07-01T18:32:02Z",
+     "published_at": "2026-07-03T04:27:12Z"
+   },
+   "sync": {
+     "ignore_presets": [
+       "defaults_v1"
+     ]
+   }
+ }
