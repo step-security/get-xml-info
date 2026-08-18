@@ -31,18 +31,18 @@
 
 ## Console usage
 
-    node dist/index.js -f path/to/xmlfile -p //element
-    
+    node dist/index.mjs -f path/to/xmlfile -p //element
+
 You can also add -d for debug output.
 
-    node dist/index.js -f path/to/file.xml -p //element -d
+    node dist/index.mjs -f path/to/file.xml -p //element -d
 
 To leverage the zero-nodes-action functionality, use the -z argument:
 
-    node dist/index.js -f file.xml -p //version -z warn
-    node dist/index.js -f file.xml -p //version -z silent
+    node dist/index.mjs -f file.xml -p //version -z warn
+    node dist/index.mjs -f file.xml -p //version -z silent
 
-Alternatively, if you are developing the code, you can run `npm install`, and run the non-compiled `index.js` version in the root directory.
+Alternatively, if you are developing the code, you can run `npm install`, and run the non-compiled `index.mjs` version in the root directory.
 
 ## Attributes
 

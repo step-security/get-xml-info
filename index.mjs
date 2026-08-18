@@ -1,7 +1,10 @@
-const core = require('@actions/core');
-const fs = require('fs');
-const path = require('path');
-const axios = require('axios')
+import * as core from '@actions/core';
+import fs from 'fs';
+import path from 'path';
+import axios from 'axios';
+import minimist from 'minimist';
+import * as xpath from 'xpath';
+import { DOMParser } from '@xmldom/xmldom';
 
 async function validateSubscription() {
   let repoPrivate;
@@ -15,10 +18,10 @@ async function validateSubscription() {
   const action = process.env.GITHUB_ACTION_REPOSITORY;
   const docsUrl = 'https://docs.stepsecurity.io/actions/stepsecurity-maintained-actions';
   core.info('');
-  core.info('\u001b[1;36mStepSecurity Maintained Action\u001b[0m');
+  core.info('[1;36mStepSecurity Maintained Action[0m');
   core.info(`Secure drop-in replacement for ${upstream}`);
-  if (repoPrivate === false) core.info('\u001b[32m\u2713 Free for public repositories\u001b[0m');
-  core.info(`\u001b[36mLearn more:\u001b[0m ${docsUrl}`);
+  if (repoPrivate === false) core.info('[32m✓ Free for public repositories[0m');
+  core.info(`[36mLearn more:[0m ${docsUrl}`);
   core.info('');
   if (repoPrivate === false) return;
   const serverUrl = process.env.GITHUB_SERVER_URL || 'https://github.com';
@@ -31,8 +34,8 @@ async function validateSubscription() {
     );
   } catch (error) {
     if (axios.isAxiosError(error) && error.response?.status === 403) {
-      core.error(`\u001b[1;31mThis action requires a StepSecurity subscription for private repositories.\u001b[0m`);
-      core.error(`\u001b[31mLearn how to enable a subscription: ${docsUrl}\u001b[0m`);
+      core.error(`[1;31mThis action requires a StepSecurity subscription for private repositories.[0m`);
+      core.error(`[31mLearn how to enable a subscription: ${docsUrl}[0m`);
       process.exit(1);
     }
     core.info('Timeout or API not reachable. Continuing to next step.');
@@ -44,7 +47,7 @@ async function run() {
   try {
     console.log('Welcome to Get-XML-Version.')
 
-    var argv = require('minimist')(process.argv.slice(2));
+    var argv = minimist(process.argv.slice(2));
     var xmlFile;
     if (typeof argv.f !== 'undefined') {
       // CLI mode (-f flag) is intentionally unrestricted — developer/local use only, no GitHub Actions environment assumed.
@@ -74,10 +77,6 @@ async function run() {
 
     console.log(`Namespaces: ${namespaces}`)
 
-    var xpath = require('xpath'), dom = require('@xmldom/xmldom').DOMParser
-
-
-
     fs.readFile(xmlFile, 'utf8', function read(err, data) {
       if (err) {
         core.setFailed(err.message);
@@ -85,13 +84,20 @@ async function run() {
       else {
         console.log('File was read successfully. Proceeding to parse DOM.');
 
-        var doc = new dom().parseFromString(data, 'text/xml');
+        // Strip a leading UTF-8 BOM (U+FEFF), which xmldom rejects as
+        // "Unexpected content outside root element". See issue #50.
+        if (data.charCodeAt(0) === 0xFEFF) {
+          console.log('Byte Order Mark detected and removed.');
+          data = data.slice(1);
+        }
+
+        var doc = new DOMParser().parseFromString(data, 'text/xml');
         if (debug) {
           console.log('Debug output: Document.');
           console.log(doc);
         }
 
-        selector = xpath.select
+        let selector = xpath.select;
         if (namespaces)
           selector = xpath.useNamespaces(JSON.parse(namespaces));
 
