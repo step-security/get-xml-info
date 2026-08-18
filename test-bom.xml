@@ -3,10 +3,10 @@
   <packagename>test_joomla_package</packagename>
   <name>Test Joomla Package</name>
   <creationDate>December 4, 2019</creationDate>
-  <author>Christopher Mavros</author>
-  <authorEmail>mavrosxristoforos@gmail.com</authorEmail>
-  <authorUrl>mavrosxristoforos.com</authorUrl>
-  <copyright>All Rights Reserved (C) Mavrosxristoforos.com</copyright>
+  <author>StepSecurity</author>
+  <authorEmail>support@stepsecurity.io</authorEmail>
+  <authorUrl>stepsecurity.io</authorUrl>
+  <copyright>All Rights Reserved (C) StepSecurity</copyright>
   <license>GPLv3</license>
   <version>1.0.20</version>
   <description>Test Description</description>
